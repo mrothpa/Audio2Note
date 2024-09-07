@@ -1,7 +1,6 @@
 import sqlite3
 import os
 
-
 def mk_db():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(base_dir, '..', 'db', 'database.db')#
@@ -13,6 +12,7 @@ def mk_db():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS filestrack (
             Name TEXT PRIMARY KEY,
+            Id TEXT REQUIRED,
             GoogleCloud DATE,
             Local DATE,
             Transcripted DATE,
