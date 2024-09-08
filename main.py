@@ -77,7 +77,7 @@ class App(tk.Tk):
     def prepare(self):
         result = database.read_google()
         # print(result)
-        missing_files_google = main(file_list=result, download_folder="Audios")
+        missing_files_google = main(file_list=result)
         # print("Fehlende Dateien von Google Drive:", missing_files_google)
         database.add_google(data=missing_files_google)
         
@@ -86,7 +86,10 @@ class App(tk.Tk):
         return result_sort
     
     def download(self):
-        print("Button 1 gedrückt")
+        result = database.read_google()
+        download_files = database.filter_download()
+        missing_files = main(file_list=result, download_folder="Audios", download=True, download_file_list=download_files)
+        database.update_download_files(download_files)
 
     def transcribe(self):
         print("Button 2 gedrückt")

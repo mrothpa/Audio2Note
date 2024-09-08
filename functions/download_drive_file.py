@@ -110,18 +110,20 @@ def download_missing_files(service, missing_files_dict, download_folder):
                     print(f"Download {int(status.progress() * 100)}% für {file_name}.")
             print(f"{file_name} wurde erfolgreich heruntergeladen und gespeichert in {file_path}.")
 
-def main(file_list, download_folder="Audios", status=False):
+def main(file_list, download_folder="Audios", download=False, download_file_list={}):
     """Hauptfunktion zur Ausführung des Skripts."""
     service = get_service()
     folder_name = "Audio Upload"
     folder_id = get_folder_id(service, folder_name)
+    # print(f"FileList: {file_list}")
     
     if folder_id:
         # list_files_in_folder(service, folder_id)
         # return {}
         missing_files = find_missing_files(service, folder_id, file_list)
-        if status:
-            download_missing_files(service, missing_files_dict=missing_files, download_folder=download_folder)
+        # print(f"MissingFiles: {missing_files}")
+        if download:
+            download_missing_files(service, missing_files_dict=download_file_list, download_folder=download_folder)
         return missing_files
     else:
         return {}
