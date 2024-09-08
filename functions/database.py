@@ -82,6 +82,30 @@ def add_google(data):
     connection.commit()
     connection.close()
 
+def sort_data():
+    data = read_all()
+    
+    sort_dict = {
+        "GoogleDrive": [],
+        "Local": [],
+        "Transcripted": [],
+        "Finished": [],
+    }
+    
+    for entry in data:
+        name, id_, googledrive, local, transcripted, finished = entry
+        
+        if finished:
+            sort_dict["Finished"].append(name)
+        elif transcripted:
+            sort_dict["Transcripted"].append(name)
+        elif local:
+            sort_dict["Local"].append(name)
+        elif googledrive:
+            sort_dict["GoogleDrive"].append(name)
+            
+    return sort_dict
+
 def add_test():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(base_dir, '..', 'db', 'database.db')#

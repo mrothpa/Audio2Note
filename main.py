@@ -45,30 +45,57 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
         
-        self.prepare()
+        self.files = self.prepare()
+        # print(self.files)
         
         self.title("Collapsible Frames")
         self.geometry("400x400")  # Fenstergröße
         
-        # Define the data
-        data = {
-            "Google Drive": ["lorem 1", "lorem 2", "lorem 3"],
-            "Local": ["lorem 4", "lorem 5", "lorem 6"],
-            "Transcripted": ["lorem 7", "lorem 8", "lorem 9"],
-            "Finished": ["lorem 10", "lorem 11", "lorem 12"]
-        }
-        
         # Erstellen der CollapsibleFrames
-        for title, content in data.items():
+        for title, content in self.files.items():
             frame = CollapsibleFrame(self, title, content)
             frame.pack(fill=tk.X, padx=10, pady=5)
+        
+        # Erstellen der Buttons
+        button_frame = tk.Frame(self)
+        button_frame.pack(fill=tk.X, padx=10, pady=10)
+        
+        button_frame.grid_rowconfigure(0, weight=1)
+        button_frame.grid_columnconfigure([0, 1, 2, 3], weight=1)
+        
+        buttons = [
+            ("Download", self.download, "yellow"),
+            ("Transcribe", self.transcribe, "red"),
+            ("Upload", self.upload, "blue"),
+            ("All", self.all, "green")
+        ]
+        
+        for text, func, color in buttons:
+            button = tk.Button(button_frame, text=text, command=func, bg=color, fg="white", font=("Arial", 10, "bold"), width=9, height=2, relief="raised", borderwidth=2)
+            button.pack(side=tk.LEFT, padx=5, pady=5)
     
     def prepare(self):
         result = database.read_google()
         # print(result)
         missing_files_google = main(file_list=result, download_folder="Audios")
-        print("Fehlende Dateien von Google Drive:", missing_files_google)
+        # print("Fehlende Dateien von Google Drive:", missing_files_google)
         database.add_google(data=missing_files_google)
+        
+        result_sort = database.sort_data()
+        # print(f"Result Sorted: {result_sort}")
+        return result_sort
+    
+    def download(self):
+        print("Button 1 gedrückt")
+
+    def transcribe(self):
+        print("Button 2 gedrückt")
+
+    def upload(self):
+        print("Button 3 gedrückt")
+
+    def all(self):
+        print("Button 4 gedrückt")
 
 if __name__ == "__main__":
     app = App()
