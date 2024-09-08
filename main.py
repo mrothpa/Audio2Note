@@ -78,6 +78,7 @@ class App(tk.Tk):
             button.pack(side=tk.LEFT, padx=5, pady=5)
     
     def prepare(self):
+        database.mk_db()
         result = database.read_google()
         # print(result)
         missing_files_google = main(file_list=result)

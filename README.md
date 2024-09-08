@@ -36,6 +36,7 @@ pip install -r requirements.txt
 4. Under **APIs & Services**, go to **Library** and enable the **Google Drive API**.
 5. Navigate to **APIs & Services** > **Credentials** and click **Create Credentials** > **OAuth 2.0 Client IDs**.
 6. Download the `credentials.json` file and place it in the `auth/` directory.
+7. Change the folder name from your google drive in line 116 of `functions/download_drive_file.py`
 
 ### Notion API Setup
 1. Open the [Notion Developer Console](https://www.notion.so/profile/integrations) and create a new internal integration.

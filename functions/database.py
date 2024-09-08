@@ -18,7 +18,9 @@ def mk_db():
             GoogleCloud DATE,
             Local DATE,
             Transcripted DATE,
-            Finished DATE
+            Finished DATE,
+            translation TEXT,
+            summary TEXT
         );
     ''')
 
@@ -240,25 +242,3 @@ def add_test():
 
     connection.commit()
     connection.close()
-
-def delete():
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    db_path = os.path.join(base_dir, '..', 'db', 'database.db')#
-
-    connection = sqlite3.connect(db_path)
-
-    cursor = connection.cursor()
-
-    cursor.execute('''
-        DELETE FROM filestrack
-        WHERE Id IN (
-            SELECT Id FROM filestrack
-            ORDER BY Id DESC
-            LIMIT 6
-        );
-    ''')
-
-    connection.commit()
-    connection.close()
-
-# delete()
