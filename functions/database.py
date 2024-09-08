@@ -93,7 +93,7 @@ def sort_data():
     }
     
     for entry in data:
-        name, id_, googledrive, local, transcripted, finished = entry
+        name, id_, googledrive, local, transcripted, finished, translation, summary = entry
         
         if finished:
             sort_dict["Finished"].append(name)
@@ -112,9 +112,22 @@ def filter_download():
     filter_dict = {}
     
     for entry in data:
-        name, id_, googledrive, local, transcripted, finished = entry
+        name, id_, googledrive, local, transcripted, finished, translation, summary = entry
         
         if googledrive and not local:
+            filter_dict[name] = id_
+    
+    return filter_dict
+
+def filter_transcribe():
+    data = read_all()
+    
+    filter_dict = {}
+    
+    for entry in data:
+        name, id_, googledrive, local, transcripted, finished, translation, summary = entry
+        
+        if googledrive and local and not transcripted:
             filter_dict[name] = id_
     
     return filter_dict
@@ -135,6 +148,25 @@ def update_download_files(download_file_list):
             SET Local = ?
             WHERE Id = ?
         ''', (today, id_))
+
+    connection.commit()
+    connection.close()
+    
+def update_transcribe(id_, text, summary):
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(base_dir, '..', 'db', 'database.db')
+    
+    today = datetime.now().strftime('%Y-%m-%d')
+
+    connection = sqlite3.connect(db_path)
+
+    cursor = connection.cursor()
+    
+    cursor.execute('''
+        UPDATE filestrack
+        SET Transcripted = ?, translation = ?, summary = ?
+        WHERE Id = ?
+    ''', (today, text, summary, id_))
 
     connection.commit()
     connection.close()

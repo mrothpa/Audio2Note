@@ -8,6 +8,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), './funct
 
 import database
 from download_drive_file import main
+import transcribe
+import summarize
 
 class CollapsibleFrame(ttk.Frame):
     def __init__(self, parent, title, content, *args, **kwargs):
@@ -92,7 +94,17 @@ class App(tk.Tk):
         database.update_download_files(download_files)
 
     def transcribe(self):
-        print("Button 2 gedrückt")
+        transcribe_files = database.filter_transcribe()
+        # print(transcribe_files)
+        for name, id_ in transcribe_files.items():
+            print(f"Name des Audions: {name}")
+            text = transcribe.transcribe(name)
+            corrected_text = summarize.correct_text(text)
+            summarized_text = summarize.summarize_text(corrected_text)
+            print(f"Text: {text}")
+            print(f"Summary: {summarized_text}")
+            database.update_transcribe(id_, text, summarized_text)
+            print()
 
     def upload(self):
         print("Button 3 gedrückt")

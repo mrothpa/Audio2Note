@@ -16,14 +16,17 @@ def correct_text(text):
     corrected_text = text
 
     # Die gefundenen Fehler durchgehen und Korrekturen anwenden
-    for match in data['matches']:
-        start = match['offset']
-        end = start + match['length']
-        replacement = match['replacements'][0]['value']  # Die erste vorgeschlagene Korrektur verwenden
-        corrected_text = corrected_text[:start] + replacement + corrected_text[end:]
-
-    print("Korrigierter Text:", corrected_text)
-    return corrected_text
+    try:
+        for match in data['matches']:
+            start = match['offset']
+            end = start + match['length']
+            replacement = match['replacements'][0]['value']  # Die erste vorgeschlagene Korrektur verwenden
+            corrected_text = corrected_text[:start] + replacement + corrected_text[end:]
+        
+        # print("Korrigierter Text:", corrected_text)
+        return corrected_text
+    except:
+        return text
 
 def summarize_text(text):
     tokenizer = AutoTokenizer.from_pretrained("ml6team/mt5-small-german-finetune-mlsum")
@@ -41,7 +44,8 @@ def summarize_text(text):
     )
     summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
     
-    print("Zusammenfassung:", summary)
+    # print("Zusammenfassung:", summary)
+    return summary
 
 def summarize_text_gensim(text):
     summary = summarize(text, ratio=0.2)

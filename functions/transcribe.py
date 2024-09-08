@@ -1,10 +1,14 @@
 import whisper
 import os
 
-model = whisper.load_model("base")
+# import warnings
+# warnings.filterwarnings("ignore", message="FP16 is not supported on CPU; using FP32 instead")
 
-audio_file = os.path.join(os.path.dirname(__file__), '..', 'Audios', 'test.mp3')
+def transcribe(filename, folder='Audios'):
+    model = whisper.load_model("base")
 
-result = model.transcribe(audio_file, language="de")
+    audio_file = os.path.join(os.path.dirname(__file__), '..', folder, filename)
 
-print(result["text"])
+    result = model.transcribe(audio_file, language="de")
+
+    return result["text"]
