@@ -1,6 +1,14 @@
 import tkinter as tk
 from tkinter import ttk
 
+import os
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), './functions')))
+
+import database
+from download_drive_file import main
+
 class CollapsibleFrame(ttk.Frame):
     def __init__(self, parent, title, content, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
@@ -56,7 +64,10 @@ class App(tk.Tk):
             frame.pack(fill=tk.X, padx=10, pady=5)
     
     def prepare(self):
-        print("Vorbereitung wird ausgeführt...")
+        result = database.read_google()
+        print(result)
+        missing_files_google = main(file_list=result, download_folder="Audios")
+        print("Fehlende Dateien von Google Drive:", missing_files_google)
 
 if __name__ == "__main__":
     app = App()
