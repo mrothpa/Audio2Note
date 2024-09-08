@@ -4,7 +4,7 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../auth')))
 
-from notion_keys import NOTION_API_TOKEN, DATABASE_ID
+from notion_credentials import NOTION_API_TOKEN, DATABASE_ID
 
 def add_page(name, id_, translation, summary):
     notion = Client(auth=NOTION_API_TOKEN)
