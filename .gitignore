@@ -1,1 +1,6 @@
 venv/
+Audios/
+credentials.json
+functions/token.pickle
+auth/notion_keys.py
+auth/__pycache__
