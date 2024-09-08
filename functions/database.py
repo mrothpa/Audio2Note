@@ -63,6 +63,25 @@ def read_google():
     
     return result
 
+def read_upload(id_):
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(base_dir, '..', 'db', 'database.db')#
+
+    connection = sqlite3.connect(db_path)
+
+    cursor = connection.cursor()
+
+    cursor.execute('''
+        SELECT Name, Id, translation, summary FROM filestrack WHERE Id = ?
+    ''', (id_,))
+    
+    result = cursor.fetchone()
+
+    connection.commit()
+    connection.close()
+    
+    return result
+
 def add_google(data):
     base_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(base_dir, '..', 'db', 'database.db')#
@@ -132,6 +151,19 @@ def filter_transcribe():
     
     return filter_dict
 
+def filter_upload():
+    data = read_all()
+    
+    filter_dict = {}
+    
+    for entry in data:
+        name, id_, googledrive, local, transcripted, finished, translation, summary = entry
+        
+        if googledrive and local and transcripted and not finished:
+            filter_dict[name] = id_
+    
+    return filter_dict
+
 def update_download_files(download_file_list):
     base_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(base_dir, '..', 'db', 'database.db')
@@ -167,6 +199,25 @@ def update_transcribe(id_, text, summary):
         SET Transcripted = ?, translation = ?, summary = ?
         WHERE Id = ?
     ''', (today, text, summary, id_))
+
+    connection.commit()
+    connection.close()
+    
+def update_upload(id_):
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(base_dir, '..', 'db', 'database.db')
+    
+    today = datetime.now().strftime('%Y-%m-%d')
+
+    connection = sqlite3.connect(db_path)
+
+    cursor = connection.cursor()
+    
+    cursor.execute('''
+        UPDATE filestrack
+        SET Finished = ?
+        WHERE Id = ?
+    ''', (today, id_))
 
     connection.commit()
     connection.close()

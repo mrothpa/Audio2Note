@@ -10,6 +10,7 @@ import database
 from download_drive_file import main
 import transcribe
 import summarize
+import notion
 
 class CollapsibleFrame(ttk.Frame):
     def __init__(self, parent, title, content, *args, **kwargs):
@@ -107,10 +108,21 @@ class App(tk.Tk):
             print()
 
     def upload(self):
-        print("Button 3 gedrückt")
+        upload_files = database.filter_upload()
+        for name, id_ in upload_files.items():
+            print(f"Name des AUdios: {name}")
+            result = database.read_upload(id_)
+            # print(f"Result: {result}")
+            name_result, id_result, translation, summary = result
+            
+            notion.add_page(name=name_result, id_=id_result, translation=translation, summary=summary)
+            database.update_upload(id_)
+            
 
     def all(self):
-        print("Button 4 gedrückt")
+        self.download()
+        self.transcribe()
+        self.upload()
 
 if __name__ == "__main__":
     app = App()
