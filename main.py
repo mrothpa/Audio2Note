@@ -65,9 +65,10 @@ class App(tk.Tk):
     
     def prepare(self):
         result = database.read_google()
-        print(result)
+        # print(result)
         missing_files_google = main(file_list=result, download_folder="Audios")
         print("Fehlende Dateien von Google Drive:", missing_files_google)
+        database.add_google(data=missing_files_google)
 
 if __name__ == "__main__":
     app = App()
