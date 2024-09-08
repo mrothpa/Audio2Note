@@ -51,6 +51,7 @@ python main.py
 
 You can edit each step of the process in the 'main.py'-file. For example change the language or change the tool for the summary.
 You can also make an .exe desktop program with python pyinstaller.
+Please close the tkinter window after every comand to have the correct data of the database shown.
 
 ## Examples
 ### Input at Google Drive:
